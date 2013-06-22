@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>easeljs</title>
+		<script type="text/javascript" src="http://code.createjs.com/easeljs-0.6.1.min.js"></script>
+		<script type="text/javascript">
+			var Stage = createjs.Stage;
+			var Shape = createjs.Shape;
+			var Graphics = createjs.Graphics;
+			var Ticker = createjs.Ticker;
+
+			var stage, g;
+			window.onload = function(){
+				stage = new Stage('canvas');
+				var shape = new Shape();
+				shape.width = stage.width;
+				shape.height = stage.height;
+				
+				g = shape.graphics;
+				g.setStrokeStyle(1);
+				g.beginStroke(Graphics.getRGB(0,0,0));
+
+				stage.addChild(shape);
+
+				Ticker.setFPS(60);
+				Ticker.addListener(window);
+			}
+
+			function tick(){
+				var r = Math.random() * 256;
+				var gn = Math.random() * 256;
+				var b = Math.random() * 256;
+				//g.beginStroke(Graphics.getRGB(255,0,0));
+				g.lineTo(stage.mouseX, stage.mouseY);
+				stage.update();
+			}
+		</script>
+	</head>
+	<body>
+		<canvas width="1000" height="1000" id="canvas"></canvas>
+	</body>
+</html>

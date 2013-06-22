@@ -1,0 +1,115 @@
+<html>
+	<head>
+		<title>easeljs</title>
+		<style type="text/css">
+			canvas{
+				border : 1px solid red;
+			}
+		</style>
+		<script type="text/javascript" src="http://code.createjs.com/easeljs-0.6.1.min.js"></script>
+		<script type="text/javascript">
+			var Stage = createjs.Stage;
+			var Shape = createjs.Shape;
+			var Bitmap = createjs.Bitmap;
+			var Ticker = createjs.Ticker;
+			var Graphics = createjs.Graphics;
+
+			var RAD = 0.0174532925;
+			var angle = 0;
+			var delta = 0;
+			var stop = false;
+			var spinning = false;
+			var counter = 0;
+
+			var stage, graphics, shape, wheel, ball, xCenter, yCenter;
+			window.onload = function(){
+				init();
+				initSpin();
+				initStop();
+			}
+
+			function init(){
+				stage = new Stage('canvas');
+				xCenter = stage.canvas.width * 0.5;
+				yCenter = stage.canvas.height * 0.5;
+				ball = new Bitmap('ball.png');
+				ball.regX = ball.image.width * 0.5;
+				ball.regY = ball.image.height * 0.5;
+				ball.x = stage.canvas.width * 0.5 + 50;
+				ball.y = stage.canvas.height * 0.5 + 50;
+				ball.visible = false;
+
+
+				wheel = new Bitmap('wheelPockets.png');
+
+				wheel.regX = wheel.image.width * 0.5;
+				wheel.regY = wheel.image.height * 0.5;
+
+				wheel.x = stage.canvas.width * 0.5;
+				wheel.y = stage.canvas.height * 0.5;
+
+				console.log('wheel.regX : ' + wheel.regX);
+				console.log('wheel.regY : ' + wheel.regY);
+
+				stage.addChild(wheel);
+				stage.addChild(ball);
+
+				Ticker.setFPS(60);
+				Ticker.addListener(window);				
+			}
+
+			function initSpin(){
+				var button = document.getElementById('spin');
+				button.onclick = function(){
+					spinning = true;
+					delta = 2;
+				};
+			}
+
+			function initStop(){
+				var button = document.getElementById('stop');
+				button.onclick = function(){ 
+					stop = spinning ? true : false;
+					spinning = false;
+					console.log('stop activated');
+				};
+			}
+
+			function tick(){
+				wheel.rotation = angle;
+				ball.rotation = -angle;
+				if(delta){
+					ball.visible = true;
+					ball.x = (100 * Math.cos(-angle * RAD) + xCenter);
+					ball.y = (100 * Math.sin(-angle * RAD) + yCenter);					
+				}
+
+				angle += delta;
+				stage.update();
+				angle = angle%360;
+
+				if(stop){
+					//console.log('stop called, delta: ' + delta);
+					if(counter % 120 == 0){
+						delta--;
+					}
+					counter++;
+					if(delta <= 0){
+						counter = 0;
+						stop = false;
+					}
+				}
+			}
+
+			function distance(x, y, x1, y1){
+				return Math.sqrt( Math.pow(x-x1,2) + Math.pow(y-y1, 2));
+			}
+		</script>
+	</head>
+	<body>
+		<canvas width="600" height="600" id="canvas"></canvas>
+		<button id="spin">spin</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<button id="stop">stop</button>
+	</body>
+</html>

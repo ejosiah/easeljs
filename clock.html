@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>easljs</title>
+		<script type="text/javascript" src="http://code.createjs.com/createjs-2013.05.14.min.js"></script>
+		<script type="text/javascript" src="clock.js"></script>
+		<script type="text/javascript">
+			var stage;
+			window.onload = function(){
+				// imports
+				var Stage = createjs.Stage;
+				var Ticker = createjs.Ticker;
+
+				var width, height, clock;
+
+				stage = new Stage('canvas');
+				width = stage.canvas.width;
+				height = stage.canvas.height;
+
+				var clock = new Clock(width, height);
+				stage.addChild(clock);
+
+				Ticker.setFPS(1);
+				Ticker.addListener(window);
+
+			}
+
+			function tick(){
+				stage.update();
+			}
+		</script>
+	</head>
+	<body>
+		<canvas width="640" height="480" id="canvas"></canvas>
+	</body>
+</html>
