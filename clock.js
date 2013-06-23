@@ -3,7 +3,11 @@
 	// imports
 	var Container = createjs.Container;
 	var Bitmap = createjs.Bitmap;
-	var self;
+	var Shadow = createjs.Shadow;
+
+
+	var self, 
+		shadow = new Shadow('#000', 0, 5, 4);
 
 	var Clock = function(stageWidth, stageHeight){
 		this.initialize(stageWidth, stageHeight);
@@ -16,34 +20,15 @@
 	p.initialize = function(stageWidth, stageHeight){
 		self = this;
 		
+
 		self.Container_initialize();
 		self.centerX = stageWidth * 0.5;
 		self.centerY = stageHeight * 0.5;
 
-		self.secondHand = new Bitmap('second.png');
-		self.secondHand.regX = self.secondHand.image.width * 0.5;
-		self.secondHand.regY = self.secondHand.image.height * 0.83;
-		self.secondHand.x = self.centerX;
-		self.secondHand.y = self.centerY;
-
-
-		self.minuteHand = new Bitmap('minute.png');
-		self.minuteHand.regX = self.minuteHand.image.width * 0.5;
-		self.minuteHand.regY = self.minuteHand.image.height * 0.91;
-		self.minuteHand.x = self.centerX;
-		self.minuteHand.y = self.centerY;
-
-		self.hourHand = new Bitmap('hour.png');
-		self.hourHand.regX = self.hourHand.image.width * 0.5;
-		self.hourHand.regY = self.hourHand.image.height * 0.89;
-		self.hourHand.x = self.centerX;
-		self.hourHand.y = self.centerY;
-
-		self.background = new Bitmap('clock_bg.png');
-		self.background.regX = self.background.image.width * 0.5;
-		self.background.regY = self.background.image.height * 0.5;
-		self.background.x = self.centerX;
-		self.background.y = self.centerY;
+		self.secondHand = secondHand();
+		self.minuteHand = minuteHand();
+		self.hourHand = hourHand();
+		self.background = background();
 
 		self.addChild(self.background);
 		self.addChild(self.hourHand);
@@ -53,6 +38,49 @@
 
 
 	};
+
+	function secondHand(){
+		var secondHand = new Bitmap('second.png');
+		secondHand.regX = secondHand.image.width * 0.5;
+		secondHand.regY = secondHand.image.height * 0.83;
+		secondHand.x = self.centerX;
+		secondHand.y = self.centerY;
+		secondHand.shadow = shadow
+
+		return secondHand;
+	}
+
+	function minuteHand(){
+		var minuteHand = new Bitmap('minute.png');
+		minuteHand.regX = minuteHand.image.width * 0.5;
+		minuteHand.regY = minuteHand.image.height * 0.91;
+		minuteHand.x = self.centerX;
+		minuteHand.y = self.centerY;
+		minuteHand.shadow = shadow;
+
+		return minuteHand;
+	}
+
+	function hourHand(){
+		var hourHand = new Bitmap('hour.png');
+		hourHand.regX = hourHand.image.width * 0.5;
+		hourHand.regY = hourHand.image.height * 0.89;
+		hourHand.x = self.centerX;
+		hourHand.y = self.centerY;
+		hourHand.shadow = shadow;
+
+		return hourHand;
+	}
+
+	function background(){
+		var background = new Bitmap('clock_bg.png');
+		background.regX = background.image.width * 0.5;
+		background.regY = background.image.height * 0.5;
+		background.x = self.centerX;
+		background.y = self.centerY;
+		background.shadow = new Shadow('#000', 0, 5, 4);;
+		return background;
+	}
 
 	p.tickHandler = function(event){
 		var time = new Date(), sAngle, mAngle, hAngle; 

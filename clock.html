@@ -4,9 +4,10 @@
 		<script type="text/javascript" src="http://code.createjs.com/createjs-2013.05.14.min.js"></script>
 		<script type="text/javascript" src="clock.js"></script>
 		<script type="text/javascript">
-			var stage;
+			var stage, alarm;
 			window.onload = function(){
 				// imports
+				buildAlarm();
 				var Stage = createjs.Stage;
 				var Ticker = createjs.Ticker;
 
@@ -25,11 +26,64 @@
 			}
 
 			function tick(){
+				var now;
+				if(alarm){
+					now = new Date();
+					if(now.getHours() === alarm.getHours() && now.getMinutes() === alarm.getMinutes()){
+						// TODO - alarm implementation;
+						alarm = null;
+					}
+				}
 				stage.update();
+			}
+
+			function buildAlarm(){
+				var div = document.getElementById('alarm'),
+					form = document.createElement('form'),
+					hourSelect = document.createElement('select'),
+					minuteSelect = document.createElement('select'),
+					i, option, submit;
+
+				for(i = 0; i < 24; i++){
+					option = document.createElement('option');
+					option.value = i;
+					option.text = i;
+					hourSelect.appendChild(option);
+				}
+
+				for(i = 0; i < 60; i++){
+					option = document.createElement('option');
+					option.value = i;
+					option.text = i;
+					minuteSelect.appendChild(option);				
+				}
+
+				submit = document.createElement('input');
+				submit.type = 'submit';
+				submit.value = 'alarm';
+				submit.onclick = function(e){
+					e.preventDefault();
+					var hours, minute;
+
+					hours = hourSelect.options[hourSelect.selectedIndex].value;
+					minute = minuteSelect.options[minuteSelect.selectedIndex].value;
+
+					alarm = new Date();
+					alarm.setSeconds(0);
+					alarm.setMinutes(minute);
+					alarm.setHours(hours);
+				}
+
+				form.appendChild(hourSelect);
+				form.appendChild(minuteSelect);
+				form.appendChild(submit);
+				div.appendChild(form);
 			}
 		</script>
 	</head>
 	<body>
 		<canvas width="640" height="480" id="canvas"></canvas>
+		<div id="alarm">
+		</div>
 	</body>
 </html>

@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<title>easljs</title>
+		<script type="text/javascript" src="createjs.js"></script>
+		<script type="text/javascript">
+			var Stage = createjs.Stage;
+			var SpriteSheet = createjs.SpriteSheet;
+			var SpriteSheetUtils = createjs.SpriteSheetUtils;
+			var BitmapAnimation = createjs.BitmapAnimation;
+			var Shadow = createjs.Shadow;
+			var Ticker = createjs.Ticker;
+
+			var monsterRun = new Image(),
+				monsterIdle = new Image(),
+				animation,
+				sheet;
+
+			window.onload = function(){
+				stage = new Stage('canvas')
+				monsterRun.src = 'MonsterARun.png';
+				monsterRun.onerror = handleElementError;
+				monsterIdle.src = 'MonsterAIdle.png';
+				monsterIdle.onerror = handleElementError;
+
+				sheet = new SpriteSheet({
+					images: [monsterRun, monsterIdle],
+
+					frames: {
+						width: 64,
+						height: 64,
+						regX: 32,
+						regY: 32
+					},
+
+					animations: {
+						walk: [0, 9, 'walk'],
+						idle : [10, 20, 'idle']
+					}
+				});
+
+				SpriteSheetUtils.addFlippedFrames(sheet, true, false, false);
+
+				animation = new BitmapAnimation(sheet);
+				animation.gotoAndPlay('walk');
+
+				animation.shadow = new Shadow('#454', 0, 5, 4);
+				animation.name = 'monster1'
+				animation.vX = 4;
+				animation.x = 16;
+				animation.y = 32;
+				animation.currentFrame = 0;
+				stage.addChild(animation);
+
+				Ticker.useRAF = true;
+				Ticker.setFPS(25);
+				Ticker.addListener(window)
+			};
+
+			function tick(){
+				stage.update()
+			}
+
+		    //called if there is an error loading the image (usually due to a 404)
+		    function handleElementError(e) {
+		        console.log("Error Loading Asset : " + e.target.src);
+		    }
+		</script>
+	</head>
+	<body>
+		<canvas width="640" height="480" id="canvas"></canvas>
+	</body>
+</html>
